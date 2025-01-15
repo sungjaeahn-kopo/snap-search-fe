@@ -13,7 +13,7 @@ const HeaderWrapper = styled.header`
   display: flex;
   align-items: center;
 `;
-const PlatformTitle = styled.h1`
+const PlatformTitle = styled.div`
   font-family: "SUIT";
   font-weight: 700;
   font-size: 24px;
@@ -22,7 +22,7 @@ const PlatformTitle = styled.h1`
 
 const Header = ({ platformName }: HeaderProps) => {
   return (
-    <Typography>
+    <Typography component="div">
       <PlatformTitle>{platformName}</PlatformTitle>
     </Typography>
   );

@@ -11,6 +11,8 @@ import {
 interface CountryCardProps {
   countryName: string;
   countryFlag?: string;
+  countryId: number; // country id를 받아 league 리스트를 가져오기 위해 추가
+  onCountrySelect: (countryId: number, countryName: string) => void; // Country 선택 시 실행할 함수
 }
 
 const CustomCardContent = styled(CardContent)({
@@ -24,9 +26,19 @@ const CustomCardContent = styled(CardContent)({
 const CountryCard: React.FC<CountryCardProps> = ({
   countryName,
   countryFlag,
+  countryId,
+  onCountrySelect,
 }) => {
   return (
-    <Card sx={{ width: 150, margin: "auto" }}>
+    <Card
+      sx={{
+        width: 150,
+        margin: "auto",
+        cursor: "pointer", // 클릭 가능하게 표시
+        ":hover": { boxShadow: 6 }, // Hover 효과
+      }}
+      onClick={() => onCountrySelect(countryId, countryName)}
+    >
       {countryFlag ? (
         <Box
           sx={{
@@ -42,10 +54,13 @@ const CountryCard: React.FC<CountryCardProps> = ({
         </Box>
       ) : (
         <Typography
-          variant="body2"
-          color="text.secondary"
           textAlign="center"
           py={6}
+          sx={{
+            fontFamily: "SUIT", // Select에도 폰트 적용
+            fontSize: "18px",
+            fontWeight: 500,
+          }}
         >
           No Image
         </Typography>
