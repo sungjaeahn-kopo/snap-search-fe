@@ -7,6 +7,7 @@ import {
   styled,
   Typography,
 } from "@mui/material";
+import LazyImageComponent from './LazyImageComponent';
 
 interface CountryCardProps {
   countryName: string;
@@ -45,12 +46,13 @@ const CountryCard: React.FC<CountryCardProps> = ({
             padding: "5px", // Add spacing around the image
           }}
         >
-          <CardMedia
+          {/* <CardMedia
             component="img"
             height="140"
             image={countryFlag}
             alt={`${countryName} flag`}
-          />
+          /> */}
+          <LazyImageComponent src={countryFlag} alt={`${countryName} logo`} width={100} height={100} />
         </Box>
       ) : (
         <Typography

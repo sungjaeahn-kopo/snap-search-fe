@@ -15,6 +15,13 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true, // 빌드 중 ESLint 에러 무시
   },
+  webpack: (config, { isServer }) => {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+    };
+    return config;
+  },
 };
 
 module.exports = nextConfig;

@@ -6,7 +6,7 @@ import { Country, League, Team } from "@/types/api";
 import { Spinner } from "@/components/common/Spinner";
 import Header from "@/components/common/Header";
 import SeasonSelector from "@/components/common/SeasonSelector";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { Box, Container } from "@mui/material";
 import CountryCard from "@/components/common/CountryCard";
 import Image from "next/image";
@@ -72,64 +72,40 @@ export default function Home() {
   const seasons = Array.from({ length: 13 }, (_, i) => (2024 - i).toString());
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Header platformName="SNAP-SEARCH" />
-      <Box sx={{ mt: 4, mb: 4 }}>
-        <SeasonSelector
-          seasons={seasons}
-          selectedSeason={selectedSeason}
-          onSeasonChange={setSelectedSeason}
-        />
-      </Box>
-      <Box>
-        <SelectionBreadcrumb
-          selectedSeason={selectedSeason}
-          selectedCountry={selectedCountry}
-          selectedLeague={selectedLeague}
-          onSeasonClick={() => {
-            setSelectedCountry(null);
-            setSelectedLeague(null);
-          }}
-          onCountryClick={() => {
-            setSelectedLeague(null);
-            // setSelectedCountry({ id: countryId, name: "국가 이름" }); // Replace with actual name
-          }}
-          onLeagueClick={() => {
-            // setSelectedLeague({ id: leagueId, name: "리그 이름" }); // Replace with actual name
-          }}
-          onReset={() => {
-            setSelectedSeason("2024");
-            setSelectedCountry(null);
-            setSelectedLeague(null);
-          }}
-        />
-      </Box>
-      {selectedSeason && !selectedCountry?.id && (
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
-            gap: "16px",
-          }}
-        >
-          {countries?.map((country) => (
-            <CountryCard
-              key={country.countryId}
-              countryName={country.countryName}
-              countryFlag={country.countryFlag}
-              countryId={country.countryId}
-              onCountrySelect={() =>
-                setSelectedCountry({
-                  id: country.countryId,
-                  name: country.countryName,
-                })
-              } // CountryCard 클릭 시 countryId 설정
-            />
-          ))}
+    <Suspense fallback={<Spinner />}>
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Header platformName="SNAP-SEARCH" />
+        <Box sx={{ mt: 4, mb: 4 }}>
+          <SeasonSelector
+            seasons={seasons}
+            selectedSeason={selectedSeason}
+            onSeasonChange={setSelectedSeason}
+          />
         </Box>
-      )}
-      {selectedCountry?.id && !selectedLeague?.id && (
-        <Box sx={{ mt: 4 }}>
+        <Box>
+          <SelectionBreadcrumb
+            selectedSeason={selectedSeason}
+            selectedCountry={selectedCountry}
+            selectedLeague={selectedLeague}
+            onSeasonClick={() => {
+              setSelectedCountry(null);
+              setSelectedLeague(null);
+            }}
+            onCountryClick={() => {
+              setSelectedLeague(null);
+              // setSelectedCountry({ id: countryId, name: "국가 이름" }); // Replace with actual name
+            }}
+            onLeagueClick={() => {
+              // setSelectedLeague({ id: leagueId, name: "리그 이름" }); // Replace with actual name
+            }}
+            onReset={() => {
+              setSelectedSeason("2024");
+              setSelectedCountry(null);
+              setSelectedLeague(null);
+            }}
+          />
+        </Box>
+        {selectedSeason && !selectedCountry?.id && (
           <Box
             sx={{
               display: "grid",
@@ -137,42 +113,68 @@ export default function Home() {
               gap: "16px",
             }}
           >
-            {leagues?.map((league) => (
-              <LeagueCard
-                key={league.leagueId}
-                leagueName={league.leagueName}
-                leagueLogo={league.leagueLogo}
-                leagueId={league.leagueId}
-                onLeagueSelect={() =>
-                  setSelectedLeague({
-                    id: league.leagueId,
-                    name: league.leagueName,
+            {countries?.map((country) => (
+              <CountryCard
+                key={country.countryId}
+                countryName={country.countryName}
+                countryFlag={country.countryFlag}
+                countryId={country.countryId}
+                onCountrySelect={() =>
+                  setSelectedCountry({
+                    id: country.countryId,
+                    name: country.countryName,
                   })
-                } // LeagueCard 클릭 시 leagueId 설정
+                } // CountryCard 클릭 시 countryId 설정
               />
             ))}
           </Box>
-        </Box>
-      )}
-      {selectedCountry?.id && selectedLeague?.id && (
-        <Box sx={{ mt: 4 }}>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
-              gap: "16px",
-            }}
-          >
-            {teams?.map((team) => (
-              <TeamCard
-                key={team.teamId}
-                teamName={team.teamName}
-                teamLogo={team.teamLogo}
-              />
-            ))}
+        )}
+        {selectedCountry?.id && !selectedLeague?.id && (
+          <Box sx={{ mt: 4 }}>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+                gap: "16px",
+              }}
+            >
+              {leagues?.map((league) => (
+                <LeagueCard
+                  key={league.leagueId}
+                  leagueName={league.leagueName}
+                  leagueLogo={league.leagueLogo}
+                  leagueId={league.leagueId}
+                  onLeagueSelect={() =>
+                    setSelectedLeague({
+                      id: league.leagueId,
+                      name: league.leagueName,
+                    })
+                  } // LeagueCard 클릭 시 leagueId 설정
+                />
+              ))}
+            </Box>
           </Box>
-        </Box>
-      )}
-    </Container>
+        )}
+        {selectedCountry?.id && selectedLeague?.id && (
+          <Box sx={{ mt: 4 }}>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+                gap: "16px",
+              }}
+            >
+              {teams?.map((team) => (
+                <TeamCard
+                  key={team.teamId}
+                  teamName={team.teamName}
+                  teamLogo={team.teamLogo}
+                />
+              ))}
+            </Box>
+          </Box>
+        )}
+      </Container>
+    </Suspense>
   );
 }

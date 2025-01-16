@@ -6,6 +6,7 @@ import {
   styled,
   Typography,
 } from "@mui/material";
+import LazyImageComponent from './LazyImageComponent';
 
 interface TeamCardProps {
   teamName: string;
@@ -38,19 +39,20 @@ const TeamCard: React.FC<TeamCardProps> = ({
       onClick={onTeamSelect} // 클릭 이벤트 설정
     >
       {teamLogo ? (
-        <CardMedia
-          component="img"
-          image={teamLogo}
-          alt={`${teamName} logo`}
-          sx={{
-            padding: "5px",
-            borderRadius: "5px",
-            width: "100%",
-            height: "150px",
-            objectFit: "contain",
-            backgroundColor: "#f0f0f0",
-          }}
-        />
+        // <CardMedia
+        //   component="img"
+        //   image={teamLogo}
+        //   alt={`${teamName} logo`}
+        //   sx={{
+        //     padding: "5px",
+        //     borderRadius: "5px",
+        //     width: "100%",
+        //     height: "150px",
+        //     objectFit: "contain",
+        //     backgroundColor: "#f0f0f0",
+        //   }}
+        // />
+        <LazyImageComponent src={teamLogo} alt={`${teamName} logo`} width={100} height={100} />
       ) : (
         <Typography
           variant="body2"

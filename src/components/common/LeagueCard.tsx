@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
   CardMedia,
+  Skeleton,
   styled,
   Typography,
 } from "@mui/material";
+import Image from 'next/image';
+import LazyImageComponent from './LazyImageComponent';
 
 interface LeagueCardProps {
   leagueName: string;
@@ -28,6 +31,9 @@ const LeagueCard: React.FC<LeagueCardProps> = ({
   leagueId,
   onLeagueSelect,
 }) => {
+
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
   return (
     <Card
       sx={{
@@ -39,20 +45,42 @@ const LeagueCard: React.FC<LeagueCardProps> = ({
       }}
       onClick={() => onLeagueSelect(leagueId, leagueName)} // 클릭 이벤트 설정
     >
-      {leagueLogo ? (
-        <CardMedia
-          component="img"
-          image={leagueLogo}
-          alt={`${leagueName} logo`}
+      {!isImageLoaded && (
+        <Skeleton
+          variant="rectangular"
+          width="100%"
+          height="150px"
           sx={{
             padding: "5px",
             borderRadius: "5px",
-            width: "100%",
-            height: "150px",
-            objectFit: "contain",
-            backgroundColor: "#f0f0f0",
+            backgroundColor: "#e0e0e0",
           }}
         />
+      )}
+      {leagueLogo ? (
+        <LazyImageComponent src={leagueLogo} alt={`${leagueName} logo`} width={50} height={50} />
+        // <CardMedia
+        //   component="img"
+        //   image={optimizedLogo}
+        //   alt={`${leagueName} logo`}
+        //   loading="lazy"
+        //   sx={{
+        //     padding: "5px",
+        //     borderRadius: "5px",
+        //     width: "100%",
+        //     height: "150px",
+        //     objectFit: "contain",
+        //     backgroundColor: "#f0f0f0",
+        //   }}
+        // />
+        // <Image
+        //     src={optimizedLogo}
+        //     alt={`${leagueName} logo`}
+        //     layout="fill"
+        //     objectFit="contain"
+        //     style={{ borderRadius: "5px", padding: "5px" }}
+        //     sizes="150px" // 이미지 크기 지정
+        //   />
       ) : (
         <Typography
           variant="body2"
