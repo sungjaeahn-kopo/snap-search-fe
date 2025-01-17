@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && tar -czf build.tar.gz .next package.json next.config.js tsconfig.json public .env.production",
+    "build": "next build && tar -czf build.tar.gz .next ./package.json ./next.config.js ./tsconfig.json ./public ./.env.production",
     "sendAZure": "scp -i /c/study/snap-search_key.pem build.tar.gz lvalue@40.82.136.44:/var/www/build",
     "start": "next start",
     "lint": "next lint"

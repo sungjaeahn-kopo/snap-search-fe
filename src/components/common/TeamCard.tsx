@@ -1,12 +1,13 @@
 import React from "react";
 import {
+  Box,
   Card,
   CardContent,
   CardMedia,
   styled,
   Typography,
 } from "@mui/material";
-import LazyImageComponent from './LazyImageComponent';
+import LazyImageComponent from "./LazyImageComponent";
 
 interface TeamCardProps {
   teamName: string;
@@ -31,7 +32,6 @@ const TeamCard: React.FC<TeamCardProps> = ({
     <Card
       sx={{
         width: 150,
-        height: "200px",
         margin: "auto",
         cursor: "pointer", // 클릭 가능 표시
         ":hover": { boxShadow: 6 }, // Hover 효과
@@ -39,20 +39,20 @@ const TeamCard: React.FC<TeamCardProps> = ({
       onClick={onTeamSelect} // 클릭 이벤트 설정
     >
       {teamLogo ? (
-        // <CardMedia
-        //   component="img"
-        //   image={teamLogo}
-        //   alt={`${teamName} logo`}
-        //   sx={{
-        //     padding: "5px",
-        //     borderRadius: "5px",
-        //     width: "100%",
-        //     height: "150px",
-        //     objectFit: "contain",
-        //     backgroundColor: "#f0f0f0",
-        //   }}
-        // />
-        <LazyImageComponent src={teamLogo} alt={`${teamName} logo`} width={100} height={100} />
+        <Box
+          sx={{
+            display: "flex",
+            padding: "5px", // Add spacing around the image
+            justifyContent: "center",
+          }}
+        >
+          <LazyImageComponent
+            src={teamLogo}
+            alt={`${teamName} logo`}
+            width={100}
+            height={100}
+          />
+        </Box>
       ) : (
         <Typography
           variant="body2"

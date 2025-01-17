@@ -6,6 +6,7 @@ const nextConfig = {
   reactStrictMode: true, // React Strict Mode 활성화
   swcMinify: true, // SWC를 사용한 코드 압축
   images: {
+    domains: ["media.api-sports.io"], // Next.js는 외부에서 이미지 가져오지 않게 되어있음.
     formats: ["image/webp"], // 웹 최적화된 이미지 형식
     unoptimized: true, // 이미지 최적화 비활성화
   },

@@ -39,3 +39,4 @@ package-lock.json
 
 # packaing file
 .zip
+.tar.gz

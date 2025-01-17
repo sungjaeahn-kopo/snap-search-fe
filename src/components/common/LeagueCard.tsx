@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Box,
   Card,
   CardContent,
   CardMedia,
@@ -7,8 +8,8 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import Image from 'next/image';
-import LazyImageComponent from './LazyImageComponent';
+import Image from "next/image";
+import LazyImageComponent from "./LazyImageComponent";
 
 interface LeagueCardProps {
   leagueName: string;
@@ -31,56 +32,31 @@ const LeagueCard: React.FC<LeagueCardProps> = ({
   leagueId,
   onLeagueSelect,
 }) => {
-
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
-
   return (
     <Card
       sx={{
         width: 150,
-        height: "200px",
         margin: "auto",
         cursor: "pointer", // 클릭 가능하게 표시
         ":hover": { boxShadow: 6 }, // Hover 효과
       }}
       onClick={() => onLeagueSelect(leagueId, leagueName)} // 클릭 이벤트 설정
     >
-      {!isImageLoaded && (
-        <Skeleton
-          variant="rectangular"
-          width="100%"
-          height="150px"
-          sx={{
-            padding: "5px",
-            borderRadius: "5px",
-            backgroundColor: "#e0e0e0",
-          }}
-        />
-      )}
       {leagueLogo ? (
-        <LazyImageComponent src={leagueLogo} alt={`${leagueName} logo`} width={50} height={50} />
-        // <CardMedia
-        //   component="img"
-        //   image={optimizedLogo}
-        //   alt={`${leagueName} logo`}
-        //   loading="lazy"
-        //   sx={{
-        //     padding: "5px",
-        //     borderRadius: "5px",
-        //     width: "100%",
-        //     height: "150px",
-        //     objectFit: "contain",
-        //     backgroundColor: "#f0f0f0",
-        //   }}
-        // />
-        // <Image
-        //     src={optimizedLogo}
-        //     alt={`${leagueName} logo`}
-        //     layout="fill"
-        //     objectFit="contain"
-        //     style={{ borderRadius: "5px", padding: "5px" }}
-        //     sizes="150px" // 이미지 크기 지정
-        //   />
+        <Box
+          sx={{
+            display: "flex",
+            padding: "5px", // Add spacing around the image
+            justifyContent: "center",
+          }}
+        >
+          <LazyImageComponent
+            src={leagueLogo}
+            alt={`${leagueName} logo`}
+            width={100}
+            height={100}
+          />
+        </Box>
       ) : (
         <Typography
           variant="body2"
