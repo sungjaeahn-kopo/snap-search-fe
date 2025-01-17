@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && tar -czf build.tar.gz .next package.json next.config.js tsconfig.json",
+    "build": "next build && tar -czf build.tar.gz .next package.json next.config.js tsconfig.json public .env.production",
     "sendAZure": "scp -i /c/study/snap-search_key.pem build.tar.gz lvalue@40.82.136.44:/var/www/build",
     "start": "next start",
     "lint": "next lint"
@@ -26,6 +26,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10",
+    "cross-env": "^7.0.3",
     "eslint": "^8",
     "eslint-config-next": "13.5.8",
     "postcss": "^8",

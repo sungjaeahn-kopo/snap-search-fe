@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  basePath: "",
+  assetPrefix: "",
+  output: "export",
   reactStrictMode: true, // React Strict Mode 활성화
   swcMinify: true, // SWC를 사용한 코드 압축
   images: {
