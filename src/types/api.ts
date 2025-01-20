@@ -24,3 +24,18 @@ export interface Team {
   teamName: string;
   teamLogo: string;
 }
+export interface Coach {
+  id: number;
+  name: string;
+  age: string;
+  nationality: string;
+  photo: string;
+  careers: Career[];
+}
+export interface Career {
+  teamId: number;
+  teamName: string;
+  teamLogo: string;
+  startDate: string;
+  endDate: string;
+}

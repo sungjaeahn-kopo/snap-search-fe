@@ -10,9 +10,10 @@ import {
 import LazyImageComponent from "./LazyImageComponent";
 
 interface TeamCardProps {
+  teamId: number;
   teamName: string;
-  teamLogo?: string;
-  onTeamSelect?: () => void; // 팀 선택 이벤트 콜백
+  teamLogo: string;
+  onTeamSelect: (teamId: number) => void; // 팀 선택 이벤트 콜백
 }
 
 const CustomCardContent = styled(CardContent)({
@@ -24,6 +25,7 @@ const CustomCardContent = styled(CardContent)({
 });
 
 const TeamCard: React.FC<TeamCardProps> = ({
+  teamId,
   teamName,
   teamLogo,
   onTeamSelect,
@@ -36,7 +38,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
         cursor: "pointer", // 클릭 가능 표시
         ":hover": { boxShadow: 6 }, // Hover 효과
       }}
-      onClick={onTeamSelect} // 클릭 이벤트 설정
+      onClick={() => onTeamSelect(teamId)} // 클릭 이벤트 설정
     >
       {teamLogo ? (
         <Box

@@ -13,6 +13,7 @@ import Image from "next/image";
 import LeagueCard from "@/components/common/LeagueCard";
 import SelectionBreadcrumb from "@/components/common/SelectionBreadcrumb";
 import TeamCard from "@/components/common/TeamCard";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [selectedSeason, setSelectedSeason] = useState("2024");
@@ -24,10 +25,8 @@ export default function Home() {
     id: number;
     name: string;
   } | null>(null);
-  const [selectedTeam, setSelectedTeam] = useState<{
-    id: number;
-    name: string;
-  } | null>(null);
+
+  const router = useRouter(); // Next.js router 사용
 
   const { data: countries, isLoading: isLoadingCountries } = useQuery<
     Country[]
@@ -167,8 +166,10 @@ export default function Home() {
               {teams?.map((team) => (
                 <TeamCard
                   key={team.teamId}
+                  teamId={team.teamId}
                   teamName={team.teamName}
                   teamLogo={team.teamLogo}
+                  onTeamSelect={() => router.push(`/team/${team.teamId}`)} // 클릭 시 라우팅
                 />
               ))}
             </Box>
