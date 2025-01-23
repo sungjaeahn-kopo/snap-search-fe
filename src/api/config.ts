@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://api.toomuchoffside.site";
+  process.env.NEXT_PUBLIC_API_URL || "https://api.toomuchoffside.site";
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,

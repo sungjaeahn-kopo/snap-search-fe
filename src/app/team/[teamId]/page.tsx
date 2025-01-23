@@ -1,8 +1,9 @@
 "use client";
 
 import { coachService } from "@/api/services/coachService";
+import { playerService } from '@/api/services/PlayerService';
 import LazyImageComponent from "@/components/common/LazyImageComponent";
-import { Coach } from "@/types/api";
+import { Coach, TeamWithPlayer } from "@/types/api";
 import { Box, Card, CardContent, Container, Typography } from "@mui/material";
 import { useQuery } from "react-query";
 
@@ -17,6 +18,18 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
       enabled: !!params?.teamId, // countryId가 있을 때만 호출
     }
   );
+
+  const { data: playerInfo, isLoading: isLoadingPlayer } = useQuery<TeamWithPlayer | null>(
+    ["playerInfo", params.teamId],
+    () => {
+      if (!params?.teamId) return null; // countryId가 없으면 빈 배열 반환
+      return playerService.getPlayerInfo(params?.teamId);
+    },
+    {
+      enabled: !!params?.teamId, // countryId가 있을 때만 호출
+    }
+  );
+
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* 감독 정보 */}
@@ -29,12 +42,6 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
             height={100}
             style={{ marginBottom: "10px", objectFit: "contain" }}
           />
-          {/* <CardMedia
-            component="img"
-            image={coach?.photo}
-            alt={`${coach?.id} 로고`}
-            sx={{ width: 150, height: 150, objectFit: "contain", margin: "16px" }}
-            /> */}
           <CardContent>
             <Typography
               sx={{
@@ -163,34 +170,51 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
       </Box> */}
 
       {/* 선수 정보 */}
-      {/* <Box>
-        <Typography variant="h5" sx={{ mb: 2 }}>
+      <Box>
+        <Typography sx={{ mb: 2 }}>
           선수 정보
         </Typography>
-        <Grid container spacing={2}>
-          {teamData.players.map((player: any) => (
-            <Grid item xs={12} sm={6} md={4} key={player.id}>
-              <Card>
-                <CardMedia
-                  component="img"
-                  image={player.photo || "/placeholder.png"} // 사진 없을 시 기본 이미지
-                  alt={player.name}
-                  sx={{ height: 140, objectFit: "cover" }}
-                />
-                <CardContent>
-                  <Typography variant="h6">{player.name}</Typography>
-                  <Typography variant="body2">
-                    포지션: {player.position}
-                  </Typography>
-                  <Typography variant="body2">
-                    국적: {player.nationality}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "16px",
+            justifyContent: "flex-start",
+          }}
+        >
+          {playerInfo?.players?.map((player) => (
+            <Card
+              key={player.id}
+              sx={{
+                width: "calc(20% - 20px)", // 한 줄에 3개 배치
+                minWidth: "150px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "space-between",
+                // padding: "5px",
+              }}
+            >
+              <LazyImageComponent
+                src={player.photo || "/placeholder.png"}
+                alt={`${player.name} 로고`}
+                width={100}
+                height={100}
+                style={{ marginBottom: "10px", objectFit: "contain" }}
+              />
+              <CardContent>
+                <Typography>{player.name}</Typography>
+                <Typography>
+                  포지션: {player.position}
+                </Typography>
+                <Typography>
+                  등번호: {player.number}
+                </Typography>
+              </CardContent>
+            </Card>
           ))}
-        </Grid>
-      </Box> */}
+        </Box>
+      </Box>
     </Container>
   );
 }
