@@ -7,7 +7,7 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import LazyImageComponent from "./LazyImageComponent";
+import LazyImageComponent from "../common/LazyImageComponent";
 
 interface CountryCardProps {
   countryName: string;

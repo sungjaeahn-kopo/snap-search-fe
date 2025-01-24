@@ -8,11 +8,11 @@ import Header from "@/components/common/Header";
 import SeasonSelector from "@/components/common/SeasonSelector";
 import { Suspense, useState } from "react";
 import { Box, Container } from "@mui/material";
-import CountryCard from "@/components/common/CountryCard";
+import CountryCard from "@/components/card/CountryCard";
 import Image from "next/image";
-import LeagueCard from "@/components/common/LeagueCard";
+import LeagueCard from "@/components/card/LeagueCard";
 import SelectionBreadcrumb from "@/components/common/SelectionBreadcrumb";
-import TeamCard from "@/components/common/TeamCard";
+import TeamCard from "@/components/card/TeamCard";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -73,7 +73,6 @@ export default function Home() {
   return (
     <Suspense fallback={<Spinner />}>
       <Container maxWidth="md" sx={{ py: 4 }}>
-        <Header platformName="SNAP-SEARCH" />
         <Box sx={{ mt: 4, mb: 4 }}>
           <SeasonSelector
             seasons={seasons}

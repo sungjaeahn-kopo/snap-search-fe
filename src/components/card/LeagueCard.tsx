@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import Image from "next/image";
-import LazyImageComponent from "./LazyImageComponent";
+import LazyImageComponent from "../common/LazyImageComponent";
 
 interface LeagueCardProps {
   leagueName: string;

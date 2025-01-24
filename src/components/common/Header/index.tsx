@@ -1,30 +1,31 @@
-import { Typography } from "@mui/material";
+"use client"
+
+import { Container } from "@mui/material";
+import { useRouter } from 'next/navigation';
 import styled from "styled-components";
 interface HeaderProps {
   platformName: string;
 }
 
-const HeaderWrapper = styled.header`
-  width: 100%;
-  height: 60px;
-  padding: 0 20px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-`;
 const PlatformTitle = styled.div`
   font-family: "SUIT";
   font-weight: 700;
   font-size: 24px;
   color: #333333;
+  cursor: pointer;
 `;
 
 const Header = ({ platformName }: HeaderProps) => {
+  const router = useRouter();
+
+  const handleHeaderClick = () => {
+    router.push("/"); // 루트 URL로 이동
+  };
+
   return (
-    <Typography component="div">
-      <PlatformTitle>{platformName}</PlatformTitle>
-    </Typography>
+    <Container sx={{ py: 4 }}>
+      <PlatformTitle onClick={handleHeaderClick}>{platformName}</PlatformTitle>
+    </Container>
   );
 };
 

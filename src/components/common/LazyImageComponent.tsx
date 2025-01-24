@@ -7,6 +7,7 @@ interface LazyImageComponentProps {
   width?: number;
   height?: number;
   style?: React.CSSProperties;
+  onClick?: () => void;
 }
 
 const LazyImageComponent: React.FC<LazyImageComponentProps> = ({
@@ -15,6 +16,7 @@ const LazyImageComponent: React.FC<LazyImageComponentProps> = ({
   width,
   height,
   style,
+  onClick,
 }) => {
   return (
     <Image
@@ -29,6 +31,7 @@ const LazyImageComponent: React.FC<LazyImageComponentProps> = ({
         height: `${height}px`,
         ...style,
       }} // 이미지 스타일 적용
+      onClick={onClick}
       unoptimized
     />
   );
