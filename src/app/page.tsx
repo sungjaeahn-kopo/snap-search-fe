@@ -49,10 +49,9 @@ export default function Home() {
   );
 
   const { data: teams, isLoading: isLoadingTeams } = useQuery<Team[]>(
-    ["teams", selectedLeague?.id, selectedSeason],
+    ["teams"],
     () => {
-      if (!selectedCountry?.id || !selectedLeague?.id)
-        return Promise.resolve([]); // countryId가 없으면 빈 배열 반환
+      if (!selectedCountry?.id || !selectedLeague?.id) return Promise.resolve([]);
       return leagueService.getTeamsByLeague(
         selectedCountry?.id,
         selectedLeague?.id,
@@ -60,9 +59,11 @@ export default function Home() {
       );
     },
     {
-      enabled: !!selectedCountry?.id && !!selectedLeague?.id, // countryId가 있을 때만 호출
+      enabled: !!selectedCountry?.id && !!selectedLeague?.id,
+      staleTime: 1000 * 60 * 10, // 10분 동안 캐싱 유지
     }
   );
+
 
   if (isLoadingCountries || isLoadingLeagues || isLoadingTeams)
     return <Spinner />;
@@ -168,7 +169,10 @@ export default function Home() {
                   teamId={team.teamId}
                   teamName={team.teamName}
                   teamLogo={team.teamLogo}
-                  onTeamSelect={() => router.push(`/team/${team.teamId}`)} // 클릭 시 라우팅
+                  onTeamSelect={() => router.push(
+                    `/team/${team.teamId}?season=${selectedSeason}&league=${selectedLeague?.id}&country=${selectedCountry?.id}`
+                  )
+                  }
                 />
               ))}
             </Box>

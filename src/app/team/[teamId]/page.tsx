@@ -1,17 +1,34 @@
 "use client";
 
 import { coachService } from "@/api/services/coachService";
+import { leagueService } from '@/api/services/leagueService';
 import { playerService } from '@/api/services/PlayerService';
 import { CoachCard } from '@/components/card/CoachCard';
 import { CareerList } from '@/components/CareerList';
 import LazyImageComponent from "@/components/common/LazyImageComponent";
 import ModalComponent from '@/components/common/ModalComponent';
-import { Coach, TeamWithPlayer } from "@/types/api";
+import { Coach, Team, TeamWithPlayer } from "@/types/api";
 import { Box, Card, CardContent, Container, Typography } from "@mui/material";
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 export default function TeamDetail({ params }: { params: { teamId: number } }) {
+  const queryClient = useQueryClient();
+  const teamId = Number(params.teamId);
+
+
+  const searchParams = useSearchParams();
+
+  // 쿼리 문자열 값 가져오기
+  const season = searchParams.get("season");
+  const league = Number(searchParams.get("league"));
+  const country = Number(searchParams.get("country"));
+
+  // React Query Cache에서 팀 데이터를 가져오기
+  const cachedTeams = queryClient.getQueryData<Team[]>(["teams"]);
+  const teamFromCache = cachedTeams?.find((team) => team.teamId === teamId);
+
   const { data: coach, isLoading: isLoadingCoach } = useQuery<Coach | null>(
     ["coach", params.teamId],
     () => {
@@ -33,6 +50,25 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
       enabled: !!params?.teamId, // countryId가 있을 때만 호출
     }
   );
+
+  // Cache에서 찾지 못한 경우 서버에서 데이터 가져오기
+  const { data: teamsFromServer } = useQuery<Team[]>(
+    ["team"],
+    () => {
+      if (!country || !league || !season) return Promise.resolve([]);
+      return leagueService.getTeamsByLeague(
+        country,
+        league,
+        season
+      );
+    },
+    {
+      enabled: !teamFromCache // Cache에 데이터가 있을 경우 호출하지 않음
+    }
+  );
+
+  const teamFromServer = teamsFromServer?.find((team) => team.teamId === teamId);
+  const team = teamFromCache || teamFromServer;
 
   const [modalData, setModalData] = useState<{ title: string; content: React.ReactNode } | null>(
     null
@@ -79,90 +115,25 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
   );
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container sx={{ py: 4 }}>
+      {/* 팀 정보 */}
+      {team && (
+        <Card sx={{ display: "flex", alignItems: 'center', mb: 4 }}>
+          <LazyImageComponent
+            src={team.teamLogo || "/placeholder.png"}
+            alt={`${team.teamName} 로고`}
+            style={{ width: 100, height: 100, objectFit: "contain", margin: "16px" }}
+          />
+          <CardContent>
+            <Typography sx={{ fontWeight: 700 }}>
+              {team.teamName}
+            </Typography>
+          </CardContent>
+        </Card>
+      )}
+
       {/* 감독 정보 */}
       {coach && <CoachCard coach={coach} onClickCoach={() => handleCoachClick(coach)} />}
-
-      {/* 커리어 리스트 */}
-      {/* <Box sx={{ mb: 10 }}>
-        <Typography
-          sx={{
-            mb: 2,
-            fontFamily: "SUIT",
-            fontSize: "22px",
-            fontWeight: 700,
-          }}
-        >
-          감독 커리어
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "16px",
-            justifyContent: "flex-start",
-          }}
-        >
-          {coach?.careers?.map((career) => (
-            <Card
-              key={career.teamId}
-              sx={{
-                width: "calc(20% - 20px)", // 한 줄에 3개 배치
-                minWidth: "200px",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <LazyImageComponent
-                src={career.teamLogo || "/placeholder.png"}
-                alt={`${career.teamName} 로고`}
-                width={70}
-                height={70}
-                style={{ marginBottom: "5px", objectFit: "contain" }}
-              />
-              <Typography
-                sx={{
-                  mb: 2,
-                  fontFamily: "SUIT",
-                  fontSize: "18px",
-                  fontWeight: 600,
-                }}
-              >
-                {career.teamName}
-              </Typography>
-              <Typography
-                sx={{
-                  mb: 2,
-                  fontFamily: "SUIT",
-                  fontSize: "16px",
-                  fontWeight: 400,
-                }}
-              >
-                {career.startDate} ~ {career.endDate || "현재"}
-              </Typography>
-            </Card>
-          ))}
-        </Box>
-      </Box> */}
-      {/* 팀 정보 */}
-      {/* <Card sx={{ display: "flex", mb: 4 }}>
-        <CardMedia
-          component="img"
-          image={teamData.teamLogo}
-          alt={`${teamData.teamName} 로고`}
-          sx={{ width: 150, height: 150, objectFit: "contain", margin: "16px" }}
-        />
-        <CardContent>
-          <Typography variant="h4" sx={{ fontWeight: 700 }}>
-            {teamData.teamName}
-          </Typography>
-          <Typography variant="body1">창단: {teamData.founded}</Typography>
-          <Typography variant="body1">위치: {teamData.teamLocation}</Typography>
-          <Typography variant="body1">감독: {teamData.coach}</Typography>
-        </CardContent>
-      </Card> */}
 
       {/* 경기장 정보 */}
       {/* <Box sx={{ mb: 4 }}>
