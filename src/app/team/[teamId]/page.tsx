@@ -8,16 +8,16 @@ import { CareerList } from '@/components/CareerList';
 import LazyImageComponent from "@/components/common/LazyImageComponent";
 import ModalComponent from '@/components/common/ModalComponent';
 import { Coach, Team, TeamWithPlayer } from "@/types/api";
+import { getGradient } from '@/utils/colorExtractor';
 import { Box, Card, CardContent, Container, Typography } from "@mui/material";
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from "react-query";
 
 export default function TeamDetail({ params }: { params: { teamId: number } }) {
   const queryClient = useQueryClient();
   const teamId = Number(params.teamId);
-
-
+  const [gradientStyle, setGradientStyle] = useState<string>("");
   const searchParams = useSearchParams();
 
   // 쿼리 문자열 값 가져오기
@@ -114,11 +114,17 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
     }
   );
 
+  useEffect(() => {
+    if (team?.teamLogo) {
+      getGradient(team.teamLogo).then(setStyle => setGradientStyle(setStyle)); // useEffect 안에서 getGradient 호출 및 상태 업데이트
+    }
+  }, [team?.teamLogo]); // teamLogo가 변경될 때마다 useEffect 실행
+
   return (
     <Container sx={{ py: 4 }}>
       {/* 팀 정보 */}
       {team && (
-        <Card sx={{ display: "flex", alignItems: 'center', mb: 4 }}>
+        <Card sx={{ display: "flex", alignItems: 'center', mb: 4, background: gradientStyle }}>
           <LazyImageComponent
             src={team.teamLogo || "/placeholder.png"}
             alt={`${team.teamName} 로고`}

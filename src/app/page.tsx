@@ -49,7 +49,7 @@ export default function Home() {
   );
 
   const { data: teams, isLoading: isLoadingTeams } = useQuery<Team[]>(
-    ["teams"],
+    ["teams", selectedCountry?.id, selectedLeague?.id],
     () => {
       if (!selectedCountry?.id || !selectedLeague?.id) return Promise.resolve([]);
       return leagueService.getTeamsByLeague(
