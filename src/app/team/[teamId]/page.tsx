@@ -4,11 +4,12 @@ import { coachService } from "@/api/services/coachService";
 import { leagueService } from '@/api/services/leagueService';
 import { playerService } from '@/api/services/PlayerService';
 import { CoachCard } from '@/components/card/CoachCard';
+import { PlayerCard } from '@/components/card/PlayerCard';
 import { CareerList } from '@/components/CareerList';
 import LazyImageComponent from "@/components/common/LazyImageComponent";
 import ModalComponent from '@/components/common/ModalComponent';
 import { Coach, Team, TeamWithPlayer } from "@/types/api";
-import { getGradient } from '@/utils/colorExtractor';
+import { getContrastColor, getDominantColor } from '@/utils/colorExtractor';
 import { Box, Card, CardContent, Container, Typography } from "@mui/material";
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -18,6 +19,7 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
   const queryClient = useQueryClient();
   const teamId = Number(params.teamId);
   const [gradientStyle, setGradientStyle] = useState<string>("");
+  const [complementaryStyle, setComplementaryStyle] = useState<string>("");
   const searchParams = useSearchParams();
 
   // 쿼리 문자열 값 가져오기
@@ -116,7 +118,11 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
 
   useEffect(() => {
     if (team?.teamLogo) {
-      getGradient(team.teamLogo).then(setStyle => setGradientStyle(setStyle)); // useEffect 안에서 getGradient 호출 및 상태 업데이트
+      getDominantColor(team.teamLogo).then(dominantColor => {
+        setGradientStyle(dominantColor); // 대표 색상 적용
+        const complementaryColor = getContrastColor(dominantColor); // 보색 계산
+        setComplementaryStyle(complementaryColor); // 보색 설정
+      });
     }
   }, [team?.teamLogo]); // teamLogo가 변경될 때마다 useEffect 실행
 
@@ -131,7 +137,7 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
             style={{ width: 100, height: 100, objectFit: "contain", margin: "16px" }}
           />
           <CardContent>
-            <Typography sx={{ fontWeight: 700 }}>
+            <Typography sx={{ fontWeight: 700, fontSize: "22px", }}>
               {team.teamName}
             </Typography>
           </CardContent>
@@ -184,78 +190,12 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
                       display: "flex",
                       flexWrap: "wrap",
                       gap: "16px",
-                      justifyContent: "flex-start",
+                      justifyContent: "center",
                     }}
                   >
-                    {groupedPlayers[positionKey as keyof typeof groupedPlayers]?.map(
-                      (player) => (
-                        <Card
-                          key={player.id}
-                          sx={{
-                            width: "calc(20% - 20px)",
-                            minWidth: "150px",
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            position: "relative", // relative로 설정해 absolute 등번호 박스 기준 설정
-                            paddingTop: "30px", // 등번호 박스를 위한 공간 확보
-                            overflow: "visible", // 등번호 박스가 잘리지 않도록 설정
-                          }}
-                        >
-                          {/* 등번호 박스 */}
-                          {player.number && (
-                            <Box
-                              sx={{
-                                position: "absolute",
-                                top: "-10px",
-                                left: "50%",
-                                transform: "translate(-50%, 0)", // 중앙 정렬
-                                backgroundColor: "#1976d2",
-                                color: "#fff",
-                                borderRadius: "50%",
-                                width: "40px",
-                                height: "40px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                fontWeight: 700,
-                                fontSize: "16px",
-                                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-                              }}
-                            >
-                              {player.number}
-                            </Box>
-                          )}
-                          {/* 플레이어 정보 */}
-                          <LazyImageComponent
-                            src={player.photo || "/placeholder.png"}
-                            alt={`${player.name} 사진`}
-                            width={100}
-                            height={100}
-                            style={{ marginBottom: "10px", objectFit: "contain" }}
-                          />
-                          <CardContent
-                            sx={{
-                              textAlign: "center",
-                              wordBreak: "break-word",
-                              p: 0,
-                            }}
-                          >
-                            <Typography
-                              sx={{
-                                textAlign: "center",
-                                fontWeight: 600,
-                                fontSize: "20px",
-                                wordBreak: "break-word",
-                              }}
-                            >
-                              {player.name}
-                            </Typography>
-                            <Typography>나이: {player.age}</Typography>
-                          </CardContent>
-                        </Card>
-                      )
-                    )}
+                    {groupedPlayers[positionKey as keyof typeof groupedPlayers]?.map((player) => (
+                      <PlayerCard key={player.id} player={player} teamColor={gradientStyle} complementaryColor={complementaryStyle} />
+                    ))}
                   </Box>
                 </Box>
               );

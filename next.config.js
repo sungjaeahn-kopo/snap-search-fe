@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   basePath: "",
   assetPrefix: "",
   output: "export",
@@ -20,12 +20,29 @@ const nextConfig = {
     ignoreDuringBuilds: true, // 빌드 중 ESLint 에러 무시
   },
   webpack: (config, { isServer }) => {
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-    };
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: [
+        {
+          loader: "@svgr/webpack",
+          options: {
+            svgo: true,
+            svgoConfig: {
+              plugins: [
+                {
+                  name: "removeAttrs",
+                  params: { attrs: "(fill|stroke)" }, // ✅ fill과 stroke 삭제 방지
+                },
+                {
+                  name: "removeViewBox",
+                  active: false, // ✅ viewBox 유지
+                },
+              ],
+            },
+          },
+        },
+      ],
+    });
     return config;
   },
 };
-
-module.exports = nextConfig;
