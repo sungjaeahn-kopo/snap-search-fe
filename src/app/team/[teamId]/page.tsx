@@ -2,13 +2,16 @@
 
 import { coachService } from "@/api/services/coachService";
 import { leagueService } from '@/api/services/leagueService';
+import { matchService } from '@/api/services/MatchService';
 import { playerService } from '@/api/services/PlayerService';
 import { CoachCard } from '@/components/card/CoachCard';
 import { PlayerCard } from '@/components/card/PlayerCard';
+import { UpcomingMatchCard } from '@/components/card/UpcomingMatchCard';
 import { CareerList } from '@/components/CareerList';
 import LazyImageComponent from "@/components/common/LazyImageComponent";
 import ModalComponent from '@/components/common/ModalComponent';
-import { Coach, Team, TeamWithPlayer } from "@/types/api";
+import { PlayerPosition, PlayerPositionLabel } from '@/constants/positions';
+import { Coach, Match, Team, TeamWithPlayer } from "@/types/api";
 import { getContrastColor, getDominantColor } from '@/utils/colorExtractor';
 import { Box, Card, CardContent, Container, Typography } from "@mui/material";
 import { useSearchParams } from 'next/navigation';
@@ -69,6 +72,22 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
     }
   );
 
+  // Cache에서 찾지 못한 경우 서버에서 데이터 가져오기
+  const { data: matchInfo } = useQuery<Match | null>(
+    ["upcomingMatchInfo", teamId, season],
+    () => {
+      if (!teamId || !season) return Promise.resolve(null);
+      return matchService.getUpcomingMatchInfo(
+        teamId,
+        season
+      );
+    },
+    {
+      enabled: !!teamId && !!season,
+      keepPreviousData: false,
+    }
+  );
+
   const teamFromServer = teamsFromServer?.find((team) => team.teamId === teamId);
   const team = teamFromCache || teamFromServer;
 
@@ -94,28 +113,6 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
     );
   };
 
-  // 포지션 별로 선수 분류
-  const groupedPlayers = playerInfo?.players.reduce(
-    (acc, player) => {
-      if (player.position === "Goalkeeper") acc.goalkeepers.push(player);
-      else if (player.position === "Defender") acc.defenders.push(player);
-      else if (player.position === "Midfielder") acc.midfielders.push(player);
-      else if (player.position === "Attacker") acc.attackers.push(player);
-      return acc;
-    },
-    {
-      goalkeepers: [],
-      defenders: [],
-      midfielders: [],
-      attackers: [],
-    } as {
-      goalkeepers: typeof playerInfo["players"];
-      defenders: typeof playerInfo["players"];
-      midfielders: typeof playerInfo["players"];
-      attackers: typeof playerInfo["players"];
-    }
-  );
-
   useEffect(() => {
     if (team?.teamLogo) {
       getDominantColor(team.teamLogo).then(dominantColor => {
@@ -134,15 +131,20 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
           <LazyImageComponent
             src={team.teamLogo || "/placeholder.png"}
             alt={`${team.teamName} 로고`}
-            style={{ width: 100, height: 100, objectFit: "contain", margin: "16px" }}
+            style={{ width: 100, height: 100, objectFit: "contain", margin: "16px", background: 'white' }}
           />
           <CardContent>
-            <Typography sx={{ fontWeight: 700, fontSize: "22px", }}>
+            <Typography sx={{ fontWeight: 700, fontSize: "22px", color: complementaryStyle }}>
               {team.teamName}
             </Typography>
           </CardContent>
         </Card>
       )}
+
+      <Box sx={{ mt: 4 }}>
+        {/* 다가오는 경기 */}
+        {matchInfo && <UpcomingMatchCard matchInfo={matchInfo} teamId={teamId} season={season} />}
+      </Box>
 
       {/* 감독 정보 */}
       {coach && <CoachCard coach={coach} onClickCoach={() => handleCoachClick(coach)} />}
@@ -161,95 +163,34 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
       </Box> */}
 
       {/* 선수 정보 */}
-      {groupedPlayers && (
-        <>
-          {["goalkeepers", "defenders", "midfielders", "attackers"].map(
-            (positionKey) => {
-              const positionName =
-                positionKey === "goalkeepers"
-                  ? "골키퍼"
-                  : positionKey === "defenders"
-                    ? "수비수"
-                    : positionKey === "midfielders"
-                      ? "미드필더"
-                      : "공격수";
-
-              return (
-                <Box key={positionKey} sx={{ mb: 6 }}>
-                  <Typography
-                    sx={{
-                      mb: 3,
-                      fontWeight: 700,
-                      fontSize: "22px",
-                    }}
-                  >
-                    {positionName}
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "16px",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {groupedPlayers[positionKey as keyof typeof groupedPlayers]?.map((player) => (
-                      <PlayerCard key={player.id} player={player} teamColor={gradientStyle} complementaryColor={complementaryStyle} />
-                    ))}
-                  </Box>
-                </Box>
-              );
-            }
-          )}
-        </>
-      )}
-
-      {/* 선수 정보 */}
-      {/* <Box>
-        <Typography sx={{ mb: 2 }}>
-          선수 정보
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "16px",
-            justifyContent: "flex-start",
-          }}
-        >
-          {playerInfo?.players?.map((player) => (
-            <Card
-              key={player.id}
-              sx={{
-                width: "calc(20% - 20px)", // 한 줄에 3개 배치
-                minWidth: "150px",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "space-between",
-                // padding: "5px",
-              }}
-            >
-              <LazyImageComponent
-                src={player.photo || "/placeholder.png"}
-                alt={`${player.name} 로고`}
-                width={100}
-                height={100}
-                style={{ marginBottom: "10px", objectFit: "contain" }}
-              />
-              <CardContent>
-                <Typography>{player.name}</Typography>
-                <Typography>
-                  포지션: {player.position}
-                </Typography>
-                <Typography>
-                  등번호: {player.number}
-                </Typography>
-              </CardContent>
-            </Card>
-          ))}
+      {playerInfo && Object.values(PlayerPosition).map((position) => (
+        <Box key={position} sx={{ mb: 6 }}>
+          <Typography
+            sx={{
+              mb: 3,
+              fontWeight: 700,
+              fontSize: "22px",
+            }}
+          >
+            {PlayerPositionLabel[position]}
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "16px",
+              justifyContent: "center",
+            }}
+          >
+            {playerInfo.players
+              .filter((p) => PlayerPosition[p.position as keyof typeof PlayerPosition] === position)
+              .map((player) => (
+                <PlayerCard key={player.id} player={player} teamColor={gradientStyle} complementaryColor={complementaryStyle} />
+              ))}
+          </Box>
         </Box>
-      </Box> */}
+      ))}
+
       {/* 공통 모달 */}
       {modalData && (
         <ModalComponent

@@ -61,10 +61,12 @@ const ModalComponent = ({ open, onClose, title, content }: ModalProps) => (
     >
       <Box
         sx={{
+          width: "100%", // 컨테이너가 꽉 차도록 설정
           display: "flex",
           flexWrap: "wrap",
+          justifyContent: "center", // 아이템 중앙 정렬
+          alignItems: "center",
           gap: "16px",
-          justifyContent: "center",
         }}
       >
         {content}

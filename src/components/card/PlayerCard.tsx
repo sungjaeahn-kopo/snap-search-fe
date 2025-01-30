@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, Box, IconButton } from "@mui/material";
+import { Card, Typography, Box } from "@mui/material";
 import LazyImageComponent from "@/components/common/LazyImageComponent";
 import { Player } from '@/types/api';
 import UniformIcon from "@/assets/uniformIcon.svg";
@@ -67,9 +67,21 @@ export const PlayerCard = ({ player, teamColor, complementaryColor }: { player: 
     />
 
     {/* 선수 정보 */}
-    <CardContent sx={{ textAlign: "center", p: 0 }}>
-      <Typography sx={{ fontWeight: 600, fontSize: "16px" }}>{player.name}</Typography>
-      <Typography sx={{ fontSize: "14px", color: "#555" }}>나이: {player.age}</Typography>
-    </CardContent>
+    <Box sx={{ textAlign: "center" }}>
+      <Typography
+        sx={{
+          fontWeight: 600,
+          fontSize: "16px",
+          minHeight: "40px",
+          mb: "6px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center"
+        }}>{player.name}</Typography>
+      <Typography sx={{ fontSize: "12px", color: "#777", mt: "4px" }}>
+        {player.age} years
+      </Typography>
+    </Box>
   </Card>
 );

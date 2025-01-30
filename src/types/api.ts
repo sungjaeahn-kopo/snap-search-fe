@@ -51,4 +51,27 @@ export interface TeamWithPlayer {
   teamId: number;
   players: Player[];
 }
+export interface Match {
+  fixtureId: number;
+
+  fixtureDate: string;
+  fixtureStatusShort: string;
+  leagueName: string;
+  leagueSeason: string;
+  leagueRound: string;
+
+  teamsHomeId: number;
+  teamsHomeName: string;
+  teamsHomeLogo: string;
+  teamsAwayId: number;
+  teamsAwayName: string;
+  teamsAwayLogo: string;
+
+  goalsHome: string;
+  goalsAway: string;
+  scoreHalftimeHome: string;
+  scoreHalftimeAway: string;
+  scoreFulltimeHome: string;
+  scoreFulltimeAway: string;
+}
 
