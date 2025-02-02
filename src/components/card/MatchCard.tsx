@@ -57,7 +57,7 @@ export const MatchCard = ({ match, currentTeamId }: Props) => {
                 : "#f5f5f5",
         },
       }}
-      onClick={() => router.push(`/matches/${match.fixtureId}`)}
+      onClick={() => router.push(`/team/${currentTeamId}/matches/detail/${match.fixtureId}`)}
     >
       {/* 홈 팀 (왼쪽 정렬) */}
       <Box sx={{ display: "flex", alignItems: "center", width: "35%", justifyContent: "flex-start", gap: 1 }}>

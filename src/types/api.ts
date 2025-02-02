@@ -75,3 +75,18 @@ export interface Match {
   scoreFulltimeAway: string;
 }
 
+export interface MatchEvent {
+  fixtureId: number;
+  timeElapsed: number;
+  timeExtra: number;
+  teamId: number;
+  teamName: string;
+  teamLogo: string;
+  playerId: number;
+  playerName: string;
+  assistId: number;
+  assistName: string;
+  eventType: string;
+  detail: string;
+  comments: string;
+}
