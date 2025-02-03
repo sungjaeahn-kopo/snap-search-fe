@@ -1,27 +1,26 @@
 "use client";
 
-import { matchService } from '@/api/services/MatchService';
-import LazyImageComponent from '@/components/common/LazyImageComponent';
-import { MatchEvent } from '@/types/api';
-import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineSeparator } from '@mui/lab';
+import { matchService } from "@/api/services/MatchService";
+import CardIcon from "@/assets/card.svg";
+import SubstitutionIcon from "@/assets/change.svg";
+import GoalIcon from "@/assets/goal-icon.svg";
+import LazyImageComponent from "@/components/common/LazyImageComponent";
+import { Spinner } from "@/components/common/Spinner";
+import { MatchEvent } from "@/types/api";
+import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineSeparator } from "@mui/lab";
 import { Typography } from "@mui/material";
-import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
-import GoalIcon from '@/assets/goal-icon.svg';
-import CardIcon from '@/assets/card.svg';
-import SubstitutionIcon from '@/assets/change.svg';
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 
 const MatchEventDetail = ({ params }: { params: { fixtureId: number } }) => {
   const fixtureId = Number(params.fixtureId);
 
-  const { data: events, isLoading } = useQuery<MatchEvent[] | null>(
+  const { data: events, isLoading: isLoadingMatchEvent } = useQuery<MatchEvent[] | null>(
     ["matchEvents", fixtureId],
     () => {
       if (!fixtureId) return Promise.resolve(null);
-      return matchService.getMatchDetail(
-        fixtureId
-      );
+      return matchService.getMatchDetail(fixtureId);
     },
     {
       enabled: !!fixtureId,
@@ -36,8 +35,8 @@ const MatchEventDetail = ({ params }: { params: { fixtureId: number } }) => {
         return { icon: <GoalIcon style={{ width: 20, height: 20 }} /> };
       case "Card":
         return {
-          icon: <CardIcon style={{ fill: detail === "Yellow Card" ? 'yellow' : 'red', width: 20, height: 20 }} />
-        }
+          icon: <CardIcon style={{ fill: detail === "Yellow Card" ? "yellow" : "red", width: 20, height: 20 }} />,
+        };
       case "subst":
         return { icon: <SubstitutionIcon style={{ width: 20, height: 20 }} /> };
       default:
@@ -49,7 +48,7 @@ const MatchEventDetail = ({ params }: { params: { fixtureId: number } }) => {
     if (events) {
       const grouped = new Map();
 
-      events.forEach(event => {
+      events.forEach((event) => {
         const key = event.timeElapsed;
         if (!grouped.has(key)) {
           grouped.set(key, new Set());
@@ -62,13 +61,15 @@ const MatchEventDetail = ({ params }: { params: { fixtureId: number } }) => {
       grouped.forEach((value, key) => {
         formattedGroupedEvents.set(
           key,
-          Array.from(value as Set<string>).map(item => JSON.parse(item as string))
+          Array.from(value as Set<string>).map((item) => JSON.parse(item as string))
         );
       });
 
       setGroupedEvents(Object.fromEntries(formattedGroupedEvents));
     }
   }, [events]);
+
+  if (isLoadingMatchEvent) return <Spinner />;
 
   return (
     <Timeline position="alternate">
@@ -93,7 +94,7 @@ const MatchEventDetail = ({ params }: { params: { fixtureId: number } }) => {
           </TimelineSeparator>
 
           {/* 이벤트 카드 */}
-          <TimelineContent className={`flex flex-col ${index % 2 === 0 ? 'items-start' : 'items-end'} px-2`}>
+          <TimelineContent className={`flex flex-col ${index % 2 === 0 ? "items-start" : "items-end"} px-2`}>
             {groupedEvents[time].map((event, i) => {
               const { icon, bgColor } = getEventStyle(event.eventType, event.detail);
 
@@ -113,12 +114,7 @@ const MatchEventDetail = ({ params }: { params: { fixtureId: number } }) => {
                     {/* 팀 로고 + 팀명 */}
                     <div className="flex items-center space-x-2">
                       {event.teamLogo && (
-                        <LazyImageComponent
-                          src={event.teamLogo}
-                          alt={event.teamName}
-                          width={50}
-                          height={50}
-                        />
+                        <LazyImageComponent src={event.teamLogo} alt={event.teamName} width={50} height={50} />
                       )}
                       <Typography variant="h6" className={`font-bold`}>
                         {event.teamName}
@@ -127,9 +123,7 @@ const MatchEventDetail = ({ params }: { params: { fixtureId: number } }) => {
 
                     {/* 이벤트 설명 (선수 이름 + 어시스트) */}
                     <div className="flex flex-col text-gray-900 whitespace-normal break-words">
-                      <Typography variant="body2">
-                        {event.playerName}
-                      </Typography>
+                      <Typography variant="body2">{event.playerName}</Typography>
                       {event.assistName && (
                         <Typography variant="caption" className="text-gray-600">
                           어시스트: {event.assistName}
@@ -162,4 +156,3 @@ const MatchEventDetail = ({ params }: { params: { fixtureId: number } }) => {
 };
 
 export default MatchEventDetail;
-

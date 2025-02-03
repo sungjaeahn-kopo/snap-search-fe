@@ -1,11 +1,12 @@
 "use client";
 
-import { matchService } from '@/api/services/MatchService';
-import { MatchCard } from '@/components/card/MatchCard';
-import { Match } from '@/types/api';
-import { Card, Typography, Box, Container } from "@mui/material";
+import { matchService } from "@/api/services/MatchService";
+import { MatchCard } from "@/components/card/MatchCard";
+import { Spinner } from "@/components/common/Spinner";
+import { Match } from "@/types/api";
+import { Box, Container, Typography } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useQuery } from 'react-query';
+import { useQuery } from "react-query";
 
 const MatchDetail = ({ params }: { params: { teamId: number } }) => {
   const teamId = Number(params.teamId);
@@ -17,10 +18,7 @@ const MatchDetail = ({ params }: { params: { teamId: number } }) => {
     ["matchList", teamId, season],
     () => {
       if (!teamId || !season) return Promise.resolve(null);
-      return matchService.getTeamMatches(
-        teamId,
-        season
-      );
+      return matchService.getTeamMatches(teamId, season);
     },
     {
       enabled: !!teamId && !!season,
@@ -28,7 +26,7 @@ const MatchDetail = ({ params }: { params: { teamId: number } }) => {
   );
   const router = useRouter();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Spinner />;
 
   const sortedMatches = matchList
     ? [...matchList].sort((a, b) => new Date(b.fixtureDate).getTime() - new Date(a.fixtureDate).getTime())

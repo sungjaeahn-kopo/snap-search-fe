@@ -8,6 +8,7 @@ import { CoachCard } from "@/components/card/CoachCard";
 import { UpcomingMatchCard } from "@/components/card/UpcomingMatchCard";
 import { CareerList } from "@/components/CareerList";
 import ModalComponent from "@/components/common/ModalComponent";
+import { Spinner } from "@/components/common/Spinner";
 import { PlayerSection } from "@/components/PlayerSection";
 import { TeamInfo } from "@/components/TeamInfo";
 import { Coach, Match, Team, TeamWithPlayer } from "@/types/api";
@@ -56,7 +57,7 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
   );
 
   // Cache에서 찾지 못한 경우 서버에서 데이터 가져오기
-  const { data: teamsFromServer } = useQuery<Team[]>(
+  const { data: teamsFromServer, isLoading: isLoadingTeam } = useQuery<Team[]>(
     ["team"],
     () => {
       if (!country || !league || !season) return Promise.resolve([]);
@@ -68,7 +69,7 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
   );
 
   // Cache에서 찾지 못한 경우 서버에서 데이터 가져오기
-  const { data: matchInfo } = useQuery<Match | null>(
+  const { data: matchInfo, isLoading: isLoadingMatch } = useQuery<Match | null>(
     ["upcomingMatchInfo", teamId, season],
     () => {
       if (!teamId || !season) return Promise.resolve(null);
@@ -115,6 +116,8 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
       });
     }
   }, [team?.teamLogo]); // teamLogo가 변경될 때마다 useEffect 실행
+
+  if (isLoadingCoach || isLoadingPlayer || isLoadingTeam || isLoadingMatch) return <Spinner />;
 
   return (
     <Container sx={{ py: 4 }}>
