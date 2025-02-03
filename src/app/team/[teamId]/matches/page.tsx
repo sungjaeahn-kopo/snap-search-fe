@@ -38,15 +38,11 @@ const MatchDetail = ({ params }: { params: { teamId: number } }) => {
         경기 일정
       </Typography>
 
-      {isLoading ? (
-        <Typography>로딩 중...</Typography>
-      ) : (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          {sortedMatches?.map((match) => (
-            <MatchCard key={match.fixtureId} match={match} currentTeamId={teamId} />
-          ))}
-        </Box>
-      )}
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        {sortedMatches?.map((match) => (
+          <MatchCard key={match.fixtureId} match={match} currentTeamId={teamId} />
+        ))}
+      </Box>
     </Container>
   );
 };

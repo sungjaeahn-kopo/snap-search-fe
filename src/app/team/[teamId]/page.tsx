@@ -13,7 +13,7 @@ import { PlayerSection } from "@/components/PlayerSection";
 import { TeamInfo } from "@/components/TeamInfo";
 import { Coach, Match, Team, TeamWithPlayer } from "@/types/api";
 import { getContrastColor, getDominantColor } from "@/utils/colorExtractor";
-import { Container } from "@mui/material";
+import { Box, Container, Tab, Tabs } from "@mui/material";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
@@ -33,6 +33,11 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
   // React Query Cache에서 팀 데이터를 가져오기
   const cachedTeams = queryClient.getQueryData<Team[]>(["teams"]);
   const teamFromCache = cachedTeams?.find((team) => team.teamId === teamId);
+
+  const [tabIndex, setTabIndex] = useState(0);
+  const handleTabChange = (_event: React.SyntheticEvent, newIndex: number) => {
+    setTabIndex(newIndex);
+  };
 
   const { data: coach, isLoading: isLoadingCoach } = useQuery<Coach | null>(
     ["coach", params.teamId],
@@ -120,20 +125,28 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
   if (isLoadingCoach || isLoadingPlayer || isLoadingTeam || isLoadingMatch) return <Spinner />;
 
   return (
-    <Container sx={{ py: 4 }}>
+    <Container sx={{ py: 1 }}>
       {/* 팀 정보 */}
       {team && <TeamInfo team={team} gradientStyle={gradientStyle} complementaryStyle={complementaryStyle} />}
 
       {/* 다가오는 경기 */}
       {matchInfo && <UpcomingMatchCard matchInfo={matchInfo} teamId={teamId} season={season} />}
 
-      {/* 감독 정보 */}
-      {coach && <CoachCard coach={coach} onClickCoach={() => handleCoachClick(coach)} />}
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs value={tabIndex} onChange={handleTabChange} centered>
+          <Tab label="⚽ 경기 일정" />
+          <Tab label="👤 선수 정보" />
+          <Tab label="🎽 감독 정보" />
+        </Tabs>
+      </Box>
 
-      {/* 선수 정보 */}
-      {playerInfo && (
-        <PlayerSection playerInfo={playerInfo} teamColor={gradientStyle} complementaryColor={complementaryStyle} />
-      )}
+      <Box sx={{ mt: 4 }}>
+        {tabIndex === 0 && matchInfo && <UpcomingMatchCard matchInfo={matchInfo} teamId={teamId} season={season} />}
+        {tabIndex === 1 && playerInfo && (
+          <PlayerSection playerInfo={playerInfo} teamColor={gradientStyle} complementaryColor={complementaryStyle} />
+        )}
+        {tabIndex === 2 && coach && <CoachCard coach={coach} onClickCoach={() => handleCoachClick(coach)} />}
+      </Box>
 
       {/* 공통 모달 */}
       {modalData && (

@@ -1,11 +1,20 @@
-"use client"
+"use client";
 
-import { Container } from "@mui/material";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
 interface HeaderProps {
   platformName: string;
 }
+
+const HeaderContainer = styled.div`
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1100;
+  padding: 16px;
+  height: 70px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 효과 */
+`;
 
 const PlatformTitle = styled.div`
   font-family: "SUIT";
@@ -23,9 +32,9 @@ const Header = ({ platformName }: HeaderProps) => {
   };
 
   return (
-    <Container sx={{ py: 4 }}>
+    <HeaderContainer>
       <PlatformTitle onClick={handleHeaderClick}>{platformName}</PlatformTitle>
-    </Container>
+    </HeaderContainer>
   );
 };
 
