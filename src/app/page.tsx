@@ -169,10 +169,11 @@ export default function Home() {
                   teamId={team.teamId}
                   teamName={team.teamName}
                   teamLogo={team.teamLogo}
-                  onTeamSelect={() => router.push(
-                    `/team/${team.teamId}?season=${selectedSeason}&league=${selectedLeague?.id}&country=${selectedCountry?.id}`
-                  )
-                  }
+                  onTeamSelect={() => {
+                    router.push(
+                      `/team/${team.teamId}?season=${selectedSeason}&league=${selectedLeague?.id}&country=${selectedCountry?.id}`
+                    )
+                  }}
                 />
               ))}
             </Box>

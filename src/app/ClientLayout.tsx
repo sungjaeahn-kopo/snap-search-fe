@@ -3,6 +3,8 @@
 import Header from "@/components/common/Header";
 import styled from "styled-components";
 import { Providers } from "./providers";
+import { useEffect, useRef } from 'react';
+import { teamStore } from '@/stores/teamStore';
 
 const LayoutContainer = styled.div`
   min-height: auto;
@@ -30,10 +32,30 @@ const LayoutContainer = styled.div`
 `;
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
+  const layoutRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (layoutRef.current) {
+        teamStore.setIsScrolled(layoutRef.current.scrollTop > 130);
+      }
+    };
+
+    if (layoutRef.current) {
+      layoutRef.current.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (layoutRef.current) {
+        layoutRef.current.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
+
   return (
     <Providers>
       <Header platformName="SNAP-SEARCH" />
-      <LayoutContainer>{children}</LayoutContainer>
+      <LayoutContainer ref={layoutRef}>{children}</LayoutContainer>
     </Providers>
   );
 }

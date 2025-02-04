@@ -10,7 +10,6 @@ export const getDominantColor = async (avatarImage: string): Promise<string> => 
   try {
     // Vibrant 라이브러리를 이용하여 색상 팔레트 추출
     const palette: Palette = await Vibrant.from(avatarImage).getPalette();
-    console.log(palette);
 
     if (palette) {
       // 모든 색상 swatch 객체를 배열로 변환 후, 가장 픽셀 개수가 많은 색상 선택

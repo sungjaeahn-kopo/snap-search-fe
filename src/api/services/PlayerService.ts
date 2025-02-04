@@ -6,7 +6,7 @@ export const playerService = {
     const { data } = await apiClient.get<TeamWithPlayer>(
       `/api/players/playerInfo?teamId=${teamId}`
     );
-    console.log(data);
+
     return data;
   },
 };

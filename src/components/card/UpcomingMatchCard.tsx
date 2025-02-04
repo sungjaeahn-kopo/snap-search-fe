@@ -21,7 +21,9 @@ export const UpcomingMatchCard = ({ matchInfo, teamId, season }: { matchInfo: Ma
         transition: "transform 0.2s ease-in-out",
         "&:hover": { transform: "scale(1.02)" },
       }}
-      onClick={() => router.push(`/matches/${matchInfo.fixtureId}`)}
+      onClick={() => {
+        router.push(`/matches/${matchInfo.fixtureId}`)
+      }}
     >
       <Box sx={{ display: "flex", alignItems: "center", width: "100%", justifyContent: "space-between", px: 2, py: 1 }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: "8px" }}>

@@ -9,13 +9,15 @@ import { UpcomingMatchCard } from "@/components/card/UpcomingMatchCard";
 import { CareerList } from "@/components/CareerList";
 import ModalComponent from "@/components/common/ModalComponent";
 import { Spinner } from "@/components/common/Spinner";
+import MatchDetail from '@/components/MatchDetail';
 import { PlayerSection } from "@/components/PlayerSection";
 import { TeamInfo } from "@/components/TeamInfo";
+import { teamStore } from '@/stores/teamStore';
 import { Coach, Match, Team, TeamWithPlayer } from "@/types/api";
 import { getContrastColor, getDominantColor } from "@/utils/colorExtractor";
 import { Box, Container, Tab, Tabs } from "@mui/material";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 
 export default function TeamDetail({ params }: { params: { teamId: number } }) {
@@ -33,6 +35,7 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
   // React Query Cache에서 팀 데이터를 가져오기
   const cachedTeams = queryClient.getQueryData<Team[]>(["teams"]);
   const teamFromCache = cachedTeams?.find((team) => team.teamId === teamId);
+  const mainRef = useRef<HTMLDivElement>(null);
 
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabChange = (_event: React.SyntheticEvent, newIndex: number) => {
@@ -116,16 +119,19 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
     if (team?.teamLogo) {
       getDominantColor(team.teamLogo).then((dominantColor) => {
         setGradientStyle(dominantColor); // 대표 색상 적용
-        const complementaryColor = getContrastColor(dominantColor); // 보색 계산
-        setComplementaryStyle(complementaryColor); // 보색 설정
+        setComplementaryStyle(getContrastColor(dominantColor)); // 보색 설정
+
+        teamStore.setTeamLogo(team.teamLogo);
       });
+
+      return () => teamStore.setTeamLogo(undefined);
     }
   }, [team?.teamLogo]); // teamLogo가 변경될 때마다 useEffect 실행
 
   if (isLoadingCoach || isLoadingPlayer || isLoadingTeam || isLoadingMatch) return <Spinner />;
 
   return (
-    <Container sx={{ py: 1 }}>
+    <Container sx={{ py: 1, mt: 1 }}>
       {/* 팀 정보 */}
       {team && <TeamInfo team={team} gradientStyle={gradientStyle} complementaryStyle={complementaryStyle} />}
 
@@ -133,15 +139,15 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
       {matchInfo && <UpcomingMatchCard matchInfo={matchInfo} teamId={teamId} season={season} />}
 
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs value={tabIndex} onChange={handleTabChange} centered>
-          <Tab label="⚽ 경기 일정" />
-          <Tab label="👤 선수 정보" />
-          <Tab label="🎽 감독 정보" />
+        <Tabs value={tabIndex} onChange={handleTabChange}>
+          <Tab label="경기 일정" />
+          <Tab label="선수 정보" />
+          <Tab label="감독 정보" />
         </Tabs>
       </Box>
 
       <Box sx={{ mt: 4 }}>
-        {tabIndex === 0 && matchInfo && <UpcomingMatchCard matchInfo={matchInfo} teamId={teamId} season={season} />}
+        {tabIndex === 0 && matchInfo && <MatchDetail teamId={teamId} season={season} />}
         {tabIndex === 1 && playerInfo && (
           <PlayerSection playerInfo={playerInfo} teamColor={gradientStyle} complementaryColor={complementaryStyle} />
         )}
