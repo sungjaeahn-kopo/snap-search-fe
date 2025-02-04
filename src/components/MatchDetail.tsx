@@ -25,8 +25,12 @@ const MatchDetail = ({ teamId, season }: { teamId: number; season: string | null
 
   if (isLoading) return <Spinner />;
 
+  const parseDate = (dateString: string) => {
+    return new Date(dateString.replace(" UTC", "Z")).getTime();
+  };
+
   const sortedMatches = matchList
-    ? [...matchList].sort((a, b) => new Date(b.fixtureDate).getTime() - new Date(a.fixtureDate).getTime())
+    ? [...matchList].sort((a, b) => parseDate(b.fixtureDate) - parseDate(a.fixtureDate))
     : [];
 
   return (
