@@ -1,10 +1,9 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from 'react';
 import styled from "styled-components";
-import { teamStore } from './../../../stores/teamStore';
-import { observer } from 'mobx-react-lite';
+import { teamStore } from "./../../../stores/teamStore";
 interface HeaderProps {
   platformName: string;
 }

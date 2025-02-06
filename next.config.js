@@ -19,6 +19,7 @@ module.exports = {
   eslint: {
     ignoreDuringBuilds: true, // 빌드 중 ESLint 에러 무시
   },
+  compiler: { styledComponents: true },
   webpack: (config, { isServer }) => {
     config.module.rules.push({
       test: /\.svg$/,
