@@ -1,7 +1,7 @@
-import React from "react";
+import { Career } from "@/types/api";
 import { Box } from "@mui/material";
-import { Career } from '@/types/api';
-import { CareerCard } from './card/CareerCard';
+import { motion } from "framer-motion";
+import { CareerCard } from "./card/CareerCard";
 
 function cleanUpCareers(careers: Career[]): Career[] {
   // endDate가 null인 팀과 나머지 팀 분리
@@ -30,21 +30,32 @@ function cleanUpCareers(careers: Career[]): Career[] {
   });
 }
 
-
 export const CareerList = ({ careers }: { careers: Career[] }) => {
   const cleanedCareers = cleanUpCareers(careers);
 
   return (
     <Box
       sx={{
-        display: "flex",
-        flexWrap: "wrap",
+        display: "grid", // Grid 레이아웃 적용
+        gridTemplateColumns: "1fr", // 기본 1열
         gap: "16px",
-        justifyContent: "flex-start",
+        justifyContent: "center", // 중앙 정렬
+        width: "100%", // 전체 너비 사용
+        margin: "0 auto", // 화면 중앙 배치
       }}
     >
       {cleanedCareers.map((career) => (
-        <CareerCard key={career.teamId} career={career} />
+        <motion.div
+          key={career.teamId}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <CareerCard
+            career={career}
+            isCurrent={!career.endDate} // 현재 팀 강조 여부
+          />
+        </motion.div>
       ))}
     </Box>
   );

@@ -1,6 +1,6 @@
-import React from "react";
-import { Dialog, DialogTitle, DialogContent, IconButton, Box, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/CloseRounded";
+import { Box, Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@mui/material";
+import React from "react";
 
 interface ModalProps {
   open: boolean;
@@ -17,23 +17,27 @@ const ModalComponent = ({ open, onClose, title, content }: ModalProps) => (
     maxWidth="md"
     PaperProps={{
       sx: {
-        borderRadius: "16px",
-        padding: "16px",
-        background: "linear-gradient(to bottom, #ffffff, #f4f4f4)",
+        borderRadius: "12px",
+        padding: "0", // 전체 여백 제거
+        background: "white",
         boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.2)",
       },
     }}
   >
-    {/* 모달 타이틀 */}
+    {/* 모달 헤더 */}
     <DialogTitle
       sx={{
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "8px 16px",
-        borderBottom: "1px solid #e0e0e0",
+        padding: "16px 24px",
+        background: "linear-gradient(to right, #1E88E5, #42A5F5)", // 헤더 배경 색상
+        color: "white", // 헤더 텍스트 색상
         fontWeight: 700,
         fontSize: "20px",
+        borderTopLeftRadius: "12px",
+        borderTopRightRadius: "12px",
+        marginBottom: "16px",
       }}
     >
       <Typography
@@ -41,11 +45,13 @@ const ModalComponent = ({ open, onClose, title, content }: ModalProps) => (
           display: "flex",
           alignItems: "center",
           gap: "8px",
+          fontSize: "18px",
+          fontWeight: 600,
         }}
       >
         {title}
       </Typography>
-      <IconButton onClick={onClose} sx={{ color: "#555" }}>
+      <IconButton onClick={onClose} sx={{ color: "white" }}>
         <CloseIcon />
       </IconButton>
     </DialogTitle>
@@ -53,19 +59,18 @@ const ModalComponent = ({ open, onClose, title, content }: ModalProps) => (
     {/* 모달 내용 */}
     <DialogContent
       sx={{
-        marginTop: "16px",
+        padding: "24px", // 내용 여백 추가
         display: "flex",
         flexDirection: "column",
         gap: "16px",
+        background: "#f9f9f9",
       }}
     >
       <Box
         sx={{
-          width: "100%", // 컨테이너가 꽉 차도록 설정
+          width: "100%",
           display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center", // 아이템 중앙 정렬
-          alignItems: "center",
+          flexDirection: "column", // 리스트 형태로 보여줄 때 유리
           gap: "16px",
         }}
       >

@@ -146,7 +146,7 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
       </Box>
 
       <Box sx={{ mt: 4 }}>
-        {tabIndex === 0 && matchInfo && <MatchDetail teamId={teamId} season={season} />}
+        {tabIndex === 0 && <MatchDetail teamId={teamId} season={season} />}
         {tabIndex === 1 && playerInfo && (
           <PlayerSection playerInfo={playerInfo} teamColor={gradientStyle} complementaryColor={complementaryStyle} />
         )}
