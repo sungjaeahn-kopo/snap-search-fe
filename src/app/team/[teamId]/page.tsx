@@ -9,15 +9,15 @@ import { UpcomingMatchCard } from "@/components/card/UpcomingMatchCard";
 import { CareerList } from "@/components/CareerList";
 import ModalComponent from "@/components/common/ModalComponent";
 import { Spinner } from "@/components/common/Spinner";
-import MatchDetail from '@/components/MatchDetail';
+import MatchDetail from "@/components/MatchDetail";
 import { PlayerSection } from "@/components/PlayerSection";
 import { TeamInfo } from "@/components/TeamInfo";
-import { teamStore } from '@/stores/teamStore';
+import { teamStore } from "@/stores/teamStore";
 import { Coach, Match, Team, TeamWithPlayer } from "@/types/api";
 import { getContrastColor, getDominantColor } from "@/utils/colorExtractor";
 import { Box, Container, Tab, Tabs } from "@mui/material";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 
 export default function TeamDetail({ params }: { params: { teamId: number } }) {
@@ -35,7 +35,6 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
   // React Query Cache에서 팀 데이터를 가져오기
   const cachedTeams = queryClient.getQueryData<Team[]>(["teams"]);
   const teamFromCache = cachedTeams?.find((team) => team.teamId === teamId);
-  const mainRef = useRef<HTMLDivElement>(null);
 
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabChange = (_event: React.SyntheticEvent, newIndex: number) => {

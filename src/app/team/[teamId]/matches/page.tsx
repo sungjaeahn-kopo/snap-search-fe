@@ -5,7 +5,7 @@ import { MatchCard } from "@/components/card/MatchCard";
 import { Spinner } from "@/components/common/Spinner";
 import { Match } from "@/types/api";
 import { Box, Container, Typography } from "@mui/material";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useQuery } from "react-query";
 
 const MatchDetail = ({ params }: { params: { teamId: number } }) => {
@@ -22,9 +22,9 @@ const MatchDetail = ({ params }: { params: { teamId: number } }) => {
     },
     {
       enabled: !!teamId && !!season,
+      staleTime: 1000 * 60 * 10,
     }
   );
-  const router = useRouter();
 
   if (isLoading) return <Spinner />;
 

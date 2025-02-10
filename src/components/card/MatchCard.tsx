@@ -42,7 +42,9 @@ export const MatchCard = ({ match, currentTeamId }: Props) => {
       setIsModalOpen(true); // ✅ 경기 진행 중이면 모달 띄움
       return;
     }
-    router.push(`/team/${currentTeamId}/matches/detail/${match.fixtureId}`);
+    router.push(
+      `/team/${currentTeamId}/matches/detail/${match.fixtureId}?season=${match.leagueSeason}&teamId=${currentTeamId}`
+    );
   };
 
   return (

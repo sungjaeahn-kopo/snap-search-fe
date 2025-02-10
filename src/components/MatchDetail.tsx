@@ -5,7 +5,7 @@ import { MatchCard } from "@/components/card/MatchCard";
 import { Spinner } from "@/components/common/Spinner";
 import { Match } from "@/types/api";
 import { Box, Container, Typography } from "@mui/material";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useQuery } from "react-query";
 
 const MatchDetail = ({ teamId, season }: { teamId: number; season: string | null }) => {
@@ -20,6 +20,7 @@ const MatchDetail = ({ teamId, season }: { teamId: number; season: string | null
     },
     {
       enabled: !!teamId && !!season,
+      staleTime: 1000 * 60 * 10,
     }
   );
 
