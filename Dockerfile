@@ -19,11 +19,8 @@ COPY --from=builder /tsconfig.json /tsconfig.json
 COPY --from=builder /public /public
 COPY --from=builder /.env.production /.env.production
 
-# 6. 의존성 설치 (프로덕션 환경)
 RUN npm install
 
-# 7. 포트 노출
 EXPOSE 3000
 
-# 8. Next.js 서버 실행
 CMD ["npm", "start"]
