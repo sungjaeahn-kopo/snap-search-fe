@@ -11,7 +11,6 @@ RUN npm run build
 # 4. 런타임 환경 설정
 FROM node:18 AS runner
 
-# 5. 빌드 결과물 및 필요한 파일 복사
 COPY --from=builder /.next /.next
 COPY --from=builder /package.json /package.json
 COPY --from=builder /next.config.js /next.config.js
