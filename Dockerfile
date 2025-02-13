@@ -15,10 +15,10 @@ RUN npm run build
 FROM node:18 AS runner
 WORKDIR /app
 
-COPY --from=builder /.next /.next
-COPY --from=builder /public /public
-COPY --from=builder /package.json /package.json
-COPY --from=builder /next.config.js /next.config.js
+COPY --from=builder /app/.next /.next
+COPY --from=builder /app/public /public
+COPY --from=builder /app/package.json /package.json
+COPY --from=builder /app/next.config.js /next.config.js
 
 RUN npm install --production
 
