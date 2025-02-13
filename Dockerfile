@@ -13,14 +13,14 @@ RUN npm run build
 # 4. 런타임 환경 설정
 FROM node:18 AS runner
 
-COPY --from=builder /.next /.next
-COPY --from=builder /package.json /package.json
-COPY --from=builder /next.config.js /next.config.js
-COPY --from=builder /tsconfig.json /tsconfig.json
-COPY --from=builder /public /public
-COPY --from=builder /.env.production /.env.production
+COPY --from=builder /app/.next .next
+COPY --from=builder /app/public public
+COPY --from=builder /app/package.json package.json
+COPY --from=builder /app/next.config.js next.config.js
 
-RUN npm install
+RUN npm install --production
+
+ENV NODE_ENV=production
 
 EXPOSE 3000
 
