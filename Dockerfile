@@ -1,6 +1,5 @@
 # 1. Node.js 환경 설정
 FROM node:18 AS builder
-WORKDIR /app
 
 # 2. 로컬 파일 복사
 COPY package.json package-lock.json ./
@@ -13,7 +12,6 @@ RUN npm run build
 
 # 4. 런타임 환경 설정
 FROM node:18 AS runner
-WORKDIR /app
 
 COPY --from=builder /.next /.next
 COPY --from=builder /public /public
