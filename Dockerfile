@@ -2,10 +2,12 @@
 FROM node:18 AS builder
 
 # 2. 로컬 파일 복사
-COPY . / 
+COPY package.json package-lock.json ./
 
 # 3. 의존성 설치 및 빌드
 RUN npm install
+
+COPY . .
 RUN npm run build
 
 # 4. 런타임 환경 설정

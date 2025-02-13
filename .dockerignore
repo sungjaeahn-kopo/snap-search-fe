@@ -1,0 +1,8 @@
+node_modules
+Dockerfile
+.dockerignore
+.next
+.git
+.gitignore
+.package-lock.json
+*.vscode/
