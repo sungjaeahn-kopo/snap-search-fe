@@ -37,6 +37,7 @@ const LazyImageComponent: React.FC<LazyImageComponentProps> = ({
 
   // src에 사이즈 추가 적용
   const resizedSrc = transformImageUrl(src, size);
+  console.log(resizedSrc);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
