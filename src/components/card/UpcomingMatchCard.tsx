@@ -27,13 +27,13 @@ export const UpcomingMatchCard = ({ matchInfo, teamId, season }: { matchInfo: Ma
     >
       <Box sx={{ display: "flex", alignItems: "center", width: "100%", justifyContent: "space-between", px: 2, py: 1 }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <LazyImageComponent src={matchInfo.teamsHomeLogo} alt={matchInfo.teamsHomeName} width={30} height={30} style={{ objectFit: "contain", borderRadius: "50%" }} />
+          <LazyImageComponent src={matchInfo.teamsHomeLogo} alt={matchInfo.teamsHomeName} size={35} style={{ objectFit: "contain", borderRadius: "50%" }} />
           <Typography sx={{ fontWeight: 700, fontSize: "16px", color: "#333" }}>{matchInfo.teamsHomeName}</Typography>
         </Box>
         <Typography sx={{ fontWeight: 600, fontSize: "18px", color: "#555" }}>VS</Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <Typography sx={{ fontWeight: 700, fontSize: "16px", color: "#333" }}>{matchInfo.teamsAwayName}</Typography>
-          <LazyImageComponent src={matchInfo.teamsAwayLogo} alt={matchInfo.teamsAwayName} width={30} height={30} style={{ objectFit: "contain", borderRadius: "50%" }} />
+          <LazyImageComponent src={matchInfo.teamsAwayLogo} alt={matchInfo.teamsAwayName} size={35} style={{ objectFit: "contain", borderRadius: "50%" }} />
         </Box>
       </Box>
       <Typography sx={{ fontSize: "14px", opacity: 0.8, textAlign: "center", mb: 1, color: "#666" }}>

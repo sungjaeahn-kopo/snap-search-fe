@@ -51,8 +51,7 @@ const CountryCard: React.FC<CountryCardProps> = ({
           <LazyImageComponent
             src={countryFlag}
             alt={`${countryName} logo`}
-            width={100}
-            height={100}
+            size={100}
           />
         </Box>
       ) : (

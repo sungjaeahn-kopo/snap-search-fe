@@ -22,12 +22,11 @@ export function TeamInfo({ team, gradientStyle, complementaryStyle }: TeamInfoPr
         src={team.teamLogo || "/placeholder.png"}
         alt={`${team.teamName} 로고`}
         style={{
-          width: 100,
-          height: 100,
           objectFit: "contain",
           margin: "16px",
           background: "white",
         }}
+        size={100}
       />
       <CardContent>
         <Typography

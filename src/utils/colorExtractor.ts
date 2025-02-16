@@ -1,5 +1,6 @@
 import Vibrant from "node-vibrant";
 import { Palette, Swatch } from "node-vibrant/lib/color";
+import { transformImageUrl } from './imageUtil';
 
 /**
  * 이미지 URL을 기반으로 주요 색상을 추출하여 단일 색상 반환
@@ -9,7 +10,7 @@ import { Palette, Swatch } from "node-vibrant/lib/color";
 export const getDominantColor = async (avatarImage: string): Promise<string> => {
   try {
     // Vibrant 라이브러리를 이용하여 색상 팔레트 추출
-    const palette: Palette = await Vibrant.from(avatarImage).getPalette();
+    const palette: Palette = await Vibrant.from(transformImageUrl(avatarImage, 35)).getPalette();
 
     if (palette) {
       // 모든 색상 swatch 객체를 배열로 변환 후, 가장 픽셀 개수가 많은 색상 선택

@@ -78,7 +78,7 @@ const MatchOverview = ({ match, events }: MatchOverviewProps) => {
       >
         {/* 홈 팀 */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <LazyImageComponent src={match.teamsHomeLogo} alt={match.teamsHomeName} width={60} height={60} />
+          <LazyImageComponent src={match.teamsHomeLogo} alt={match.teamsHomeName} size={35} />
           <Typography variant="h6" sx={{ fontWeight: "bold", color: "#374151" }}>
             {match.teamsHomeName}
           </Typography>
@@ -123,7 +123,7 @@ const MatchOverview = ({ match, events }: MatchOverviewProps) => {
           <Typography variant="h6" sx={{ fontWeight: "bold", color: "#374151" }}>
             {match.teamsAwayName}
           </Typography>
-          <LazyImageComponent src={match.teamsAwayLogo} alt={match.teamsAwayName} width={60} height={60} />
+          <LazyImageComponent src={match.teamsAwayLogo} alt={match.teamsAwayName} size={35} />
         </Box>
       </Box>
 

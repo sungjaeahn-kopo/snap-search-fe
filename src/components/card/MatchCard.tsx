@@ -59,32 +59,32 @@ export const MatchCard = ({ match, currentTeamId }: Props) => {
           backgroundColor: isSelectedTeamWinner
             ? "#E3F2FD"
             : isSelectedTeamLoser
-            ? "#FFEBEE"
-            : isDraw
-            ? "#E0E0E0"
-            : "white",
+              ? "#FFEBEE"
+              : isDraw
+                ? "#E0E0E0"
+                : "white",
           borderLeft: isSelectedTeamWinner
             ? "6px solid #1976D2"
             : isSelectedTeamLoser
-            ? "6px solid #D32F2F"
-            : isDraw
-            ? "6px solid #757575"
-            : "6px solid transparent",
+              ? "6px solid #D32F2F"
+              : isDraw
+                ? "6px solid #757575"
+                : "6px solid transparent",
           "&:hover": {
             backgroundColor: isSelectedTeamWinner
               ? "#BBDEFB"
               : isSelectedTeamLoser
-              ? "#FFCDD2"
-              : isDraw
-              ? "#BDBDBD"
-              : "#f5f5f5",
+                ? "#FFCDD2"
+                : isDraw
+                  ? "#BDBDBD"
+                  : "#f5f5f5",
           },
         }}
         onClick={handleCardClick}
       >
         {/* 홈 팀 (왼쪽 정렬) */}
         <Box sx={{ display: "flex", alignItems: "center", width: "35%", justifyContent: "flex-start", gap: 1 }}>
-          <LazyImageComponent src={match.teamsHomeLogo} alt={match.teamsHomeName} width={35} height={35} />
+          <LazyImageComponent src={match.teamsHomeLogo} alt={match.teamsHomeName} size={35} />
           {!isSmallScreen && (
             <Typography fontWeight={winnerTeamId === match.teamsHomeId ? "bold" : "normal"} sx={{ fontSize: "16px" }}>
               {match.teamsHomeName}
@@ -130,7 +130,7 @@ export const MatchCard = ({ match, currentTeamId }: Props) => {
               {match.teamsAwayName}
             </Typography>
           )}
-          <LazyImageComponent src={match.teamsAwayLogo} alt={match.teamsAwayName} width={35} height={35} />
+          <LazyImageComponent src={match.teamsAwayLogo} alt={match.teamsAwayName} size={35} />
         </Box>
       </Card>
       <ModalComponent

@@ -1,3 +1,4 @@
+import { transformImageUrl } from '@/utils/imageUtil';
 import Image from "next/image";
 import React, { useEffect, useState, useRef } from "react";
 
@@ -6,6 +7,7 @@ interface LazyImageComponentProps {
   alt: string;
   width?: number;
   height?: number;
+  size?: number;
   style?: React.CSSProperties;
   onClick?: () => void;
 }
@@ -15,11 +17,26 @@ const LazyImageComponent: React.FC<LazyImageComponentProps> = ({
   alt,
   width = 100,
   height = 100,
+  size = 35,
   style,
   onClick,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const imgRef = useRef<HTMLDivElement>(null);
+
+  // URL에 동적으로 사이즈 추가하는 함수
+  // const getResizedImageUrl = (baseUrl: string, size?: number) => {
+  //   if (!baseUrl || !size) return baseUrl;
+
+  //   const urlParts = baseUrl.split("/");
+  //   const fileName = urlParts.pop();
+  //   const directory = urlParts.join("/");
+
+  //   return `${directory}/${size}x${size}/${fileName}`;
+  // };
+
+  // src에 사이즈 추가 적용
+  const resizedSrc = transformImageUrl(src, size);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -41,7 +58,7 @@ const LazyImageComponent: React.FC<LazyImageComponentProps> = ({
     <div ref={imgRef} style={{ position: "relative", ...style }}>
       {isVisible ? (
         <Image
-          src={src}
+          src={resizedSrc}
           alt={alt}
           width={width}
           height={height}

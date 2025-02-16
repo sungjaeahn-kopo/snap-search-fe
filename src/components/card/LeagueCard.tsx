@@ -53,8 +53,7 @@ const LeagueCard: React.FC<LeagueCardProps> = ({
           <LazyImageComponent
             src={leagueLogo}
             alt={`${leagueName} logo`}
-            width={100}
-            height={100}
+            size={100}
           />
         </Box>
       ) : (
