@@ -54,7 +54,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <Providers>
-      <Header platformName="SNAP-SEARCH" />
+      <Header platformName="SNAP-SEARCH2" />
       <LayoutContainer ref={layoutRef}>{children}</LayoutContainer>
     </Providers>
   );

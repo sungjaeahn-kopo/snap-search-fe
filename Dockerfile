@@ -18,8 +18,6 @@ COPY --from=builder /public /public
 COPY --from=builder /package.json /package.json
 COPY --from=builder /next.config.js /next.config.js
 
-RUN npm install --production
-
 ENV NODE_ENV=production
 
 EXPOSE 3000
