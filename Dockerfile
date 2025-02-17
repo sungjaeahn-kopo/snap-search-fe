@@ -3,8 +3,6 @@ FROM node:18 AS builder
 
 # 2. 로컬 파일 복사
 COPY package.json ./
-
-RUN rm -rf .next & rm -rf node_modules
 # 3. 의존성 설치 및 빌드
 RUN npm install
 
