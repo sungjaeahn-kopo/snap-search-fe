@@ -76,7 +76,7 @@ const EventCard = ({ event }: { event: MatchEvent }) => {
       {/* 팀 정보 */}
       <div className="flex flex-col w-full">
         <div className="flex items-center space-x-2 mb-2">
-          {event.teamLogo && <LazyImageComponent src={event.teamLogo} alt={event.teamName} width={36} height={36} />}
+          {event.teamLogo && <LazyImageComponent src={event.teamLogo} alt={event.teamName} size={35} />}
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             {event.teamName}
           </Typography>

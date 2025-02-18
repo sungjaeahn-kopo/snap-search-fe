@@ -61,8 +61,7 @@ export const PlayerCard = ({ player, teamColor, complementaryColor }: { player: 
     <LazyImageComponent
       src={player.photo || "/placeholder.png"}
       alt={`${player.name} 사진`}
-      width={80}
-      height={80}
+      size={80}
       style={{ marginBottom: "10px", objectFit: "contain" }}
     />
 

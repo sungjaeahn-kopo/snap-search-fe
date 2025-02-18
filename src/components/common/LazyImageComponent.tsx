@@ -60,12 +60,12 @@ const LazyImageComponent: React.FC<LazyImageComponentProps> = ({
         <Image
           src={resizedSrc}
           alt={alt}
-          width={width}
-          height={height}
+          width={size ? size : width}
+          height={size ? size : height}
           style={{
             objectFit: "contain",
-            width: `${width}px`,
-            height: `${height}px`,
+            width: `${size ? size : width}px`,
+            height: `${size ? size : height}px`,
           }}
           blurDataURL="/loading-image-circle.gif" // 블러에 사용할 기본 이미지
           onClick={onClick}

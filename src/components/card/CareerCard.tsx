@@ -24,8 +24,7 @@ export const CareerCard = ({ career, isCurrent }: { career: Career; isCurrent: b
     <LazyImageComponent
       src={career.teamLogo}
       alt={`${career.teamName} 로고`}
-      width={50}
-      height={50}
+      size={35}
       style={{ objectFit: "contain", marginRight: "16px" }}
     />
 
