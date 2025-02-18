@@ -4,10 +4,9 @@ FROM node:18 AS builder
 # 2. 로컬 파일 복사
 COPY package.json ./
 # 3. 의존성 설치 및 빌드
-RUN npm install
+RUN npm install && npm run build
 
 COPY . .
-RUN npm run build
 
 # 4. 런타임 환경 설정
 FROM node:18 AS runner
