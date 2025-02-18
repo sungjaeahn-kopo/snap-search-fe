@@ -1,7 +1,7 @@
 node_modules
 Dockerfile
 .dockerignore
-.next
+# .next
 .git
 .gitignore
 .package-lock.json
