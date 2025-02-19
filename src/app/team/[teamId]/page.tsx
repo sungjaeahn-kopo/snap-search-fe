@@ -15,6 +15,7 @@ import { TeamInfo } from "@/components/TeamInfo";
 import { teamStore } from "@/stores/teamStore";
 import { Coach, Match, Team, TeamWithPlayer } from "@/types/api";
 import { getContrastColor, getDominantColor } from "@/utils/colorExtractor";
+import { transformImageUrl } from '@/utils/imageUtil';
 import { Box, Container, Tab, Tabs } from "@mui/material";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -116,11 +117,12 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
 
   useEffect(() => {
     if (team?.teamLogo) {
+      console.log(team.teamLogo);
       getDominantColor(team.teamLogo).then((dominantColor) => {
         setGradientStyle(dominantColor); // 대표 색상 적용
         setComplementaryStyle(getContrastColor(dominantColor)); // 보색 설정
 
-        teamStore.setTeamLogo(team.teamLogo);
+        teamStore.setTeamLogo(transformImageUrl(team.teamLogo, 35));
       });
 
       return () => teamStore.setTeamLogo(undefined);
