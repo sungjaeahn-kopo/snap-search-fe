@@ -117,7 +117,6 @@ export default function TeamDetail({ params }: { params: { teamId: number } }) {
 
   useEffect(() => {
     if (team?.teamLogo) {
-      console.log(team.teamLogo);
       getDominantColor(team.teamLogo).then((dominantColor) => {
         setGradientStyle(dominantColor); // 대표 색상 적용
         setComplementaryStyle(getContrastColor(dominantColor)); // 보색 설정

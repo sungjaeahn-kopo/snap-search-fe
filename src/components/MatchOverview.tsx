@@ -6,6 +6,7 @@ import LazyImageComponent from "@/components/common/LazyImageComponent";
 import { EventType } from "@/constants/eventTypes";
 import { teamStore } from "@/stores/teamStore";
 import { Match, MatchEvent } from "@/types/api";
+import { transformImageUrl } from '@/utils/imageUtil';
 import { Box, Card, Divider, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
@@ -47,7 +48,7 @@ const MatchOverview = ({ match, events }: MatchOverviewProps) => {
 
   useEffect(() => {
     if (homeTeamLogo) {
-      teamStore.setTeamLogo(homeTeamLogo);
+      teamStore.setTeamLogo(transformImageUrl(homeTeamLogo, 35));
     }
     return () => teamStore.setTeamLogo(undefined);
   }, [homeTeamLogo]);
